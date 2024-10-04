@@ -11,9 +11,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-Seeder.RunSeeder();
+builder.Services.AddScoped<ApplicationContext>();
+
+
 Bootstrapper.RegisterServices(builder.Services);
+
+
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    Seeder.RunSeeder(serviceProvider);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
