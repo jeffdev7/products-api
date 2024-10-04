@@ -14,7 +14,7 @@ namespace products.infra.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>().HasData(Product.Create("Keyboard",30,10));
+            modelBuilder.Entity<Product>().HasData(Product.Create("Keyboard", 30, 10));
             modelBuilder.Entity<Product>().HasData(Product.Create("Smartphone", 699.99M, 50));
             modelBuilder.Entity<Product>().HasData(Product.Create("Laptop", 1200.50M, 30));
             modelBuilder.Entity<Product>().HasData(Product.Create("Tablet", 350.75M, 100));

@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\products.domain\products.domain\products.domain.csproj" />
+    <ProjectReference Include="..\products.application\products.application.csproj" />
+    <ProjectReference Include="..\products.infra\products.infra.csproj" />
   </ItemGroup>
 
 </Project>

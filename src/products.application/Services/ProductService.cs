@@ -1,0 +1,57 @@
+﻿using AutoMapper;
+using products.application.Services.Interface;
+using products.application.ViewModel;
+using products.domain.Entities;
+using products.domain.Repository;
+
+namespace products.application.Services
+{
+    public class ProductService : IProductService
+    {
+        private readonly IMapper _mapper;
+        private readonly IProductRepository _productRepository;
+
+        public ProductService(IProductRepository productRepository, IMapper mapper)
+        {
+            _productRepository = productRepository;
+            _mapper = mapper;
+        }
+
+        public Task<ProductViewModel> Add(ProductViewModel vm)
+        {
+            var entity = _mapper.Map<Product>(vm);
+            _productRepository.Add(entity);
+            return Task.FromResult(_mapper.Map<ProductViewModel>(entity));
+
+        }
+
+        public IEnumerable<ProductViewModel> GetAll()
+        {
+            var detail = _mapper.Map<IEnumerable<ProductViewModel>>(_productRepository.GetAll());
+            return _mapper.Map<IEnumerable<ProductViewModel>>(_productRepository.GetAll());
+        }
+
+        public ProductViewModel GetById(string id)
+        {
+            var detail = _mapper.Map<ProductViewModel>(_productRepository.GetById(id));
+            return _mapper.Map<ProductViewModel>(_productRepository.GetById(id));
+        }
+
+        public async Task<bool> Remove(string id)
+        {
+            var detail = await _productRepository.RemoveProductAsync(id);
+            return await _productRepository.RemoveProductAsync(id);
+        }
+
+        public Task<ProductViewModel> Update(ProductViewModel vm)
+        {
+            var entity = _mapper.Map<Product>(vm);
+            _productRepository.Update(entity);
+            return Task.FromResult(_mapper.Map<ProductViewModel>(entity));
+        }
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+    }
+}

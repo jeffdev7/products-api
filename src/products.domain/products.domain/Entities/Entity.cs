@@ -8,7 +8,7 @@
 
         protected Entity()
         {
-            Id = Guid.NewGuid().ToString().Substring(0,8);
+            Id = Guid.NewGuid().ToString().Substring(0, 8);
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
         }
