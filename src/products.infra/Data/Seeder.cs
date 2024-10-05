@@ -11,10 +11,8 @@ namespace products.infra.Data
             {
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
 
-                // Ensure the database is created
                 context.Database.EnsureCreated();
 
-                // Seed data if no products exist
                 if (!context.Products.Any())
                 {
                     var products = new List<Product>

@@ -23,10 +23,7 @@ namespace products.infra.Repositories
 
         public IQueryable<TEntity> GetAll() => _dbSet.AsNoTracking();
 
-        public TEntity GetById(string id)
-        {
-            return _context.Set<TEntity>().Find(id);
-        }
+        public TEntity GetById(string id) => _dbSet.Find(id);
 
         public void Remove(string id)
         {

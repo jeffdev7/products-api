@@ -9,6 +9,7 @@ namespace products.application.AutoMapper
         public ProductProfile()
         {
             CreateMap<Product, ProductViewModel>();
+            CreateMap<ProductViewModel, Product>();
         }
     }
 }

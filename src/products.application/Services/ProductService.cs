@@ -22,24 +22,20 @@ namespace products.application.Services
             var entity = _mapper.Map<Product>(vm);
             _productRepository.Add(entity);
             return Task.FromResult(_mapper.Map<ProductViewModel>(entity));
-
         }
 
-        public IEnumerable<ProductViewModel> GetAll()
+        public Task<IEnumerable<ProductViewModel>> GetAll()
         {
-            var detail = _mapper.Map<IEnumerable<ProductViewModel>>(_productRepository.GetAll());
-            return _mapper.Map<IEnumerable<ProductViewModel>>(_productRepository.GetAll());
+            return Task.FromResult(_mapper.Map<IEnumerable<ProductViewModel>>(_productRepository.GetProducts()));
         }
 
         public ProductViewModel GetById(string id)
         {
-            var detail = _mapper.Map<ProductViewModel>(_productRepository.GetById(id));
             return _mapper.Map<ProductViewModel>(_productRepository.GetById(id));
         }
 
         public async Task<bool> Remove(string id)
         {
-            var detail = await _productRepository.RemoveProductAsync(id);
             return await _productRepository.RemoveProductAsync(id);
         }
 
@@ -53,5 +49,6 @@ namespace products.application.Services
         {
             GC.SuppressFinalize(this);
         }
+
     }
 }

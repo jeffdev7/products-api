@@ -28,7 +28,7 @@ namespace products.infra.Repositories
 
         public async Task<bool> RemoveProductAsync(string Id)
         {
-            Product? product = await _context.Products.Where(_ => _.Id == Id).FirstOrDefaultAsync(default);
+            Product? product = await _context.Products.Where(_ => _.Id == Id).FirstOrDefaultAsync(CancellationToken.None);
 
             if (product == null)
                 return false;

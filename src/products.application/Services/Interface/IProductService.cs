@@ -4,7 +4,7 @@ namespace products.application.Services.Interface
 {
     public interface IProductService : IDisposable
     {
-        IEnumerable<ProductViewModel> GetAll();
+        Task<IEnumerable<ProductViewModel>> GetAll();
         ProductViewModel GetById(string id);
         Task<ProductViewModel> Update(ProductViewModel vm);
         Task<ProductViewModel> Add(ProductViewModel vm);
