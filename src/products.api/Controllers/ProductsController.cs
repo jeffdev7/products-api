@@ -15,19 +15,25 @@ namespace products.api.Controllers
             _productService = productService;
         }
 
+        [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
         [HttpGet]
         public Task<IEnumerable<ProductViewModel>> GetAll()
         {
             return _productService.GetAll();
         }
 
+        [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public ActionResult<ProductViewModel> Get(string id)
+        public ActionResult<ProductViewModel> GetProductById(string id)
         {
             var detail = _productService.GetById(id);
             return Ok(detail);
         }
 
+        //[ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes. Status422UnprocessableEntity)]
         [HttpPost]
         public ActionResult<ProductViewModel> Post([FromBody] AddProductViewModel product)
         {
@@ -35,6 +41,8 @@ namespace products.api.Controllers
             return Ok(detail);
         }
 
+        [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status201Created)]
         [HttpPut("{id}")]
         public ActionResult<ProductViewModel> Put([FromBody] ProductViewModel product)
         {
@@ -42,6 +50,9 @@ namespace products.api.Controllers
             return Ok(detail);
         }
 
+        //[ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status412PreconditionFailed)]
         [HttpDelete("{id}")]
         public ActionResult<ProductViewModel> Delete(string id)
         {

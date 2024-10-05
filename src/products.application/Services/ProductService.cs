@@ -19,6 +19,7 @@ namespace products.application.Services
 
         public ProductViewModel Add(AddProductViewModel vm)
         {
+            //validate fields
             var entity = _mapper.Map<Product>(vm);
             _productRepository.Add(entity);
             return _mapper.Map<ProductViewModel>(entity);
@@ -41,6 +42,7 @@ namespace products.application.Services
 
         public Task<ProductViewModel> Update(ProductViewModel vm)
         {
+            //validate if a product exists to updates
             var entity = _mapper.Map<Product>(vm);
             _productRepository.Update(entity);
             return Task.FromResult(_mapper.Map<ProductViewModel>(entity));
