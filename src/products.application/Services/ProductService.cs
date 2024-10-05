@@ -17,11 +17,11 @@ namespace products.application.Services
             _mapper = mapper;
         }
 
-        public Task<ProductViewModel> Add(ProductViewModel vm)
+        public ProductViewModel Add(AddProductViewModel vm)
         {
             var entity = _mapper.Map<Product>(vm);
             _productRepository.Add(entity);
-            return Task.FromResult(_mapper.Map<ProductViewModel>(entity));
+            return _mapper.Map<ProductViewModel>(entity);
         }
 
         public Task<IEnumerable<ProductViewModel>> GetAll()

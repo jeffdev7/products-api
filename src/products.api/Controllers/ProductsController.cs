@@ -24,12 +24,12 @@ namespace products.api.Controllers
         [HttpGet("{id}")]
         public ActionResult<ProductViewModel> Get(string id)
         {
-            var detail =  _productService.GetById(id);
+            var detail = _productService.GetById(id);
             return Ok(detail);
         }
 
         [HttpPost]
-        public ActionResult<ProductViewModel> Post([FromBody] ProductViewModel product)
+        public ActionResult<ProductViewModel> Post([FromBody] AddProductViewModel product)
         {
             var detail = _productService.Add(product);
             return Ok(detail);

@@ -10,6 +10,8 @@ namespace products.application.AutoMapper
         {
             CreateMap<Product, ProductViewModel>();
             CreateMap<ProductViewModel, Product>();
+            CreateMap<Product, AddProductViewModel>();
+            CreateMap<AddProductViewModel, Product>();
         }
     }
 }

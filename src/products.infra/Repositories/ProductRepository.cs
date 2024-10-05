@@ -11,19 +11,9 @@ namespace products.infra.Repositories
         {
         }
 
-        public Product GetProductById(string Id)
-        {
-            throw new NotImplementedException();
-        }
-
         public IQueryable<Product> GetProducts()
         {
             return _context.Products;
-        }
-
-        public int Insert()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<bool> RemoveProductAsync(string Id)
@@ -35,11 +25,6 @@ namespace products.infra.Repositories
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return true;
-        }
-
-        public void UpdateProduct(Product product)
-        {
-            throw new NotImplementedException();
         }
     }
 }
