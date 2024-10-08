@@ -27,40 +27,44 @@ namespace products.api.Controllers
         [HttpGet("{id}")]
         public ActionResult<ProductViewModel> GetProductById(string id)
         {
-            var detail = _productService.GetById(id);
-            return Ok(detail);
+            var result = _productService.GetById(id);
+
+            if (result is null)
+                return NotFound();
+            return Ok(result);
         }
 
-        //[ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [HttpPost]
         public ActionResult<ProductViewModel> Post([FromBody] AddProductViewModel product)
         {
             var result = _productService.Add(product);
-            if (result.IsError)
-                return UnprocessableEntity(result.Errors);
 
-            return Ok(result);
+            if (result.IsError)
+                return BadRequest(result.Errors);
+            return Created();
         }
 
         [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status201Created)]
-        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [HttpPut]
         public ActionResult<ProductViewModel> Put([FromBody] ProductViewModel product)
         {
-            var detail = _productService.Update(product);
-            return Ok(detail);
+            var result = _productService.Update(product);
+
+            if (result.Result.IsError)
+                return BadRequest(result.Result.Errors);
+            return Ok();
         }
 
-        //[ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status412PreconditionFailed)]
         [HttpDelete("{id}")]
         public ActionResult<ProductViewModel> Delete(string id)
         {
-            var detail = _productService.Remove(id);
-            return Ok(detail);
+            _productService.Remove(id);
+            return NoContent();
         }
     }
 }
