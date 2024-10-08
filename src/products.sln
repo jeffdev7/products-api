@@ -23,6 +23,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Presentation", "1-Presentation", "{A5C10E2F-DF98-4D6D-BA4F-2B93247F9150}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "products.test", "..\test\products.test\products.test.csproj", "{EE20BA68-3D1A-4A7D-82F0-B02630A722EB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{686FBB60-DDE6-4362-A188-6C4F03B08418} = {686FBB60-DDE6-4362-A188-6C4F03B08418}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{72AC4C84-78CC-4C2A-83F2-12C132EC5C89}"
 EndProject
