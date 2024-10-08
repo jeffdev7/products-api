@@ -22,43 +22,54 @@ namespace products.application.Services
         public ErrorOr<ProductViewModel> Add(AddProductViewModel vm)
         {
             List<Error> validationErrors = new List<Error>();
-            var error = new ProductValidator().Validate(vm);
+            var error = new AddProductValidator().Validate(vm);
+
             if (!error.IsValid)
             {
-                validationErrors = error.Errors.Select(_ => _.ErrorMessage).ToErrorOr().Errors;
-                return Error.Custom(422, "422", error.ToString());
+                validationErrors = error.Errors
+                    .Select(e => Error.Validation(e.PropertyName, e.ErrorMessage))
+                    .ToList();
+                return ErrorOr<ProductViewModel>.From(validationErrors);
             }
 
             var entity = _mapper.Map<Product>(vm);
             _productRepository.Add(entity);
+
             return _mapper.Map<ProductViewModel>(entity);
         }
         public Task<IEnumerable<ProductViewModel>> GetAll()
         {
             return Task.FromResult(_mapper.Map<IEnumerable<ProductViewModel>>(_productRepository.GetProducts()));
         }
-
         public ProductViewModel GetById(string id)
         {
             return _mapper.Map<ProductViewModel>(_productRepository.GetById(id));
         }
-
         public async Task<bool> Remove(string id)
         {
             return await _productRepository.RemoveProductAsync(id);
         }
-
-        public Task<ProductViewModel> Update(ProductViewModel vm)
+        public Task<ErrorOr<ProductViewModel>> Update(ProductViewModel vm)
         {
-            //validate if a product exists to updates
+            List<Error> validationErrors = new List<Error>();
+            var error = new UpdateProductValidator().Validate(vm);
+
+            if (!error.IsValid)
+            {
+                validationErrors = error.Errors
+                           .Select(e => Error.Validation(e.PropertyName, e.ErrorMessage))
+                           .ToList();
+                return Task.FromResult<ErrorOr<ProductViewModel>>(validationErrors);
+            }
+
             var entity = _mapper.Map<Product>(vm);
             _productRepository.Update(entity);
-            return Task.FromResult(_mapper.Map<ProductViewModel>(entity));
+
+            return Task.FromResult<ErrorOr<ProductViewModel>>(_mapper.Map<ProductViewModel>(entity));
         }
         public void Dispose()
         {
             GC.SuppressFinalize(this);
         }
-
     }
 }

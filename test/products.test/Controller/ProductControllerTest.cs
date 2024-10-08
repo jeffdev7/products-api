@@ -1,3 +1,4 @@
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using products.api.Controllers;
@@ -18,12 +19,12 @@ namespace products.test.Controller
                 new ProductViewModel(Guid.NewGuid().ToString(), "ProductTest2", 11.0m, 7)
             };
 
-            var getAllProductsService = new Mock<IProductService>();
+            var productsService = new Mock<IProductService>();
 
-            getAllProductsService.Setup(_ => _.GetAll())
+            productsService.Setup(_ => _.GetAll())
                 .Returns(Task.FromResult((IEnumerable<ProductViewModel>)listResult));
 
-            var productController = new ProductsController(getAllProductsService.Object);
+            var productController = new ProductsController(productsService.Object);
 
             //act
             var result = await productController.GetAll();
@@ -44,12 +45,12 @@ namespace products.test.Controller
             //Arrage
             var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
 
-            var getAllProductsService = new Mock<IProductService>();
+            var productsService = new Mock<IProductService>();
 
-            getAllProductsService.Setup(_ => _.GetById(It.IsAny<string>()))
+            productsService.Setup(_ => _.GetById(It.IsAny<string>()))
                 .Returns(expectedResult);
 
-            var productController = new ProductsController(getAllProductsService.Object);
+            var productController = new ProductsController(productsService.Object);
 
             //act
             var result = productController.GetProductById(productId);
@@ -72,24 +73,21 @@ namespace products.test.Controller
             //Arrage
             var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
 
-            var getAllProductsService = new Mock<IProductService>();
+            var productsService = new Mock<IProductService>();
 
-            getAllProductsService.Setup(_ => _.Remove(It.IsAny<string>()))
+            productsService.Setup(_ => _.Remove(It.IsAny<string>()))
                 .Returns(Task.FromResult(true));
 
-            var productController = new ProductsController(getAllProductsService.Object);
+            var productController = new ProductsController(productsService.Object);
 
             //act
             var result = productController.Delete(productId);
 
             //assert 
-            var createdResult = (result.Result as ObjectResult)!.Value;
-            var createdResultStatusCode = (result.Result as ObjectResult)!.StatusCode;
+            var createdResult = ((StatusCodeResult)result.Result!).StatusCode;
             Assert.NotNull(result);
-            Assert.NotNull(createdResult);
-            Assert.Equal(200, createdResultStatusCode);
+            Assert.Equal(204, createdResult);
         }
-
 
         [Fact]
         public void SHOULD_UPDATE_PRODUCT()
@@ -97,22 +95,108 @@ namespace products.test.Controller
             //Arrage
             var product = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
             var updatedProduct = new ProductViewModel("3SC", "ProductTest", 27.80m, 7);
-            var getAllProductsService = new Mock<IProductService>();
+            var productsService = new Mock<IProductService>();
 
-            getAllProductsService.Setup(_ => _.Update(It.IsAny<ProductViewModel>()))
-                .Returns(Task.FromResult(updatedProduct));
+            productsService.Setup(_ => _.Update(It.IsAny<ProductViewModel>()))
+                .Returns(Task.FromResult((ErrorOr.ErrorOr<ProductViewModel>)updatedProduct));
 
-            var productController = new ProductsController(getAllProductsService.Object);
+            var productController = new ProductsController(productsService.Object);
 
             //act
             var result = productController.Put(updatedProduct);
 
             //assert
             Assert.NotNull(result);
-            var createdResult = (result.Result as ObjectResult)!.Value;
-            var createdResultStatusCode = (result.Result as ObjectResult)!.StatusCode;
-            Assert.NotNull(createdResult);
-            Assert.Equal(200, createdResultStatusCode);
+            Assert.IsType<OkResult>(result.Result);
+        }
+
+        [Fact]
+        public void SHOULD_ADD_PRODUCT()
+        {
+            //Arrage
+            var product = new AddProductViewModel("ProductTest", 10.87m, 10);
+            var newProduct = new ProductViewModel(Guid.NewGuid().ToString(), "ProductTest", 10.87m, 10);
+            var productsService = new Mock<IProductService>();
+
+            productsService.Setup(_ => _.Add(It.IsAny<AddProductViewModel>()))
+                .Returns(newProduct);
+
+            var productController = new ProductsController(productsService.Object);
+
+            //act
+            var result = productController.Post(product);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.IsType<CreatedResult>(result.Result);
+        }
+
+        [Theory]
+        [InlineData("123")]
+        public void SHOULD_NOT_GET_PRODUCTBYID(string productId)
+        {
+            //Arrage
+            var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
+
+            var productsService = new Mock<IProductService>();
+
+            productsService.Setup(_ => _.GetById(It.IsAny<string>()))
+                .Returns((ProductViewModel)null);
+
+            var productController = new ProductsController(productsService.Object);
+
+            //act
+            var result = productController.GetProductById(productId);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.IsType<NotFoundResult>(result.Result);
+        }
+
+        [Fact]
+        public void SHOULD_NOT_ADD_PRODUCT()
+        {
+            //Arrage
+            var product = new AddProductViewModel("", 10.87m, 10);
+            var validationErrors = new List<Error> { Error.Validation("400") };
+            var productsService = new Mock<IProductService>();
+
+            productsService.Setup(_ => _.Add(It.IsAny<AddProductViewModel>()))
+                .Returns(ErrorOr.ErrorOr<ProductViewModel>.From(validationErrors));
+
+            var productController = new ProductsController(productsService.Object);
+
+            //act
+            var result = productController.Post(product);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+            var badRequestResult = result.Result as BadRequestObjectResult;
+            Assert.Equal(validationErrors, badRequestResult?.Value);
+        }
+
+        [Fact]
+        public void SHOULD_NOT_UPDATE_PRODUCT()
+        {
+            //Arrage
+            var product = new ProductViewModel("", "", 10.87m, 10);
+            var validationErrors = new List<Error> { Error.Validation("400") };
+            var productsService = new Mock<IProductService>();
+
+            productsService.Setup(_ => _.Update(It.IsAny<ProductViewModel>()))
+                .Returns(Task.FromResult(ErrorOr.ErrorOr<ProductViewModel>.From(validationErrors)));
+
+            var productController = new ProductsController(productsService.Object);
+
+            //act
+            var result = productController.Put(product);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+            var badRequestResult = result.Result as BadRequestObjectResult;
+            Assert.Equal(validationErrors, badRequestResult?.Value);
         }
     }
 }

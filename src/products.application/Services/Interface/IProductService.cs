@@ -7,7 +7,7 @@ namespace products.application.Services.Interface
     {
         Task<IEnumerable<ProductViewModel>> GetAll();
         ProductViewModel GetById(string id);
-        Task<ProductViewModel> Update(ProductViewModel vm);
+        Task<ErrorOr<ProductViewModel>> Update(ProductViewModel vm);
         ErrorOr<ProductViewModel> Add(AddProductViewModel vm);
         Task<bool> Remove(string id);
     }
