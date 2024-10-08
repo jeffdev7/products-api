@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using ErrorOr;
 using products.application.Services.Interface;
-using products.application.ViewModel;
+using products.crosscutting.Validation;
+using products.crosscutting.ViewModel;
 using products.domain.Entities;
 using products.domain.Repository;
 
@@ -17,14 +19,20 @@ namespace products.application.Services
             _mapper = mapper;
         }
 
-        public ProductViewModel Add(AddProductViewModel vm)
+        public ErrorOr<ProductViewModel> Add(AddProductViewModel vm)
         {
-            //validate fields
+            List<Error> validationErrors = new List<Error>();
+            var error = new ProductValidator().Validate(vm);
+            if (!error.IsValid)
+            {
+                validationErrors = error.Errors.Select(_ => _.ErrorMessage).ToErrorOr().Errors;
+                return Error.Custom(422, "422", error.ToString());
+            }
+
             var entity = _mapper.Map<Product>(vm);
             _productRepository.Add(entity);
             return _mapper.Map<ProductViewModel>(entity);
         }
-
         public Task<IEnumerable<ProductViewModel>> GetAll()
         {
             return Task.FromResult(_mapper.Map<IEnumerable<ProductViewModel>>(_productRepository.GetProducts()));

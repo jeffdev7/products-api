@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using products.application.ViewModel;
+using products.crosscutting.ViewModel;
 using products.domain.Entities;
 
 namespace products.application.AutoMapper

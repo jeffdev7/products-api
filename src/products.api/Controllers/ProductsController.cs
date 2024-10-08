@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using products.application.Services.Interface;
-using products.application.ViewModel;
+using products.crosscutting.ViewModel;
 
 namespace products.api.Controllers
 {
@@ -33,12 +33,15 @@ namespace products.api.Controllers
 
         //[ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes. Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
         [HttpPost]
         public ActionResult<ProductViewModel> Post([FromBody] AddProductViewModel product)
         {
-            var detail = _productService.Add(product);
-            return Ok(detail);
+            var result = _productService.Add(product);
+            if (result.IsError)
+                return UnprocessableEntity(result.Errors);
+
+            return Ok(result);
         }
 
         [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]

@@ -1,4 +1,5 @@
-﻿using products.application.ViewModel;
+﻿using ErrorOr;
+using products.crosscutting.ViewModel;
 
 namespace products.application.Services.Interface
 {
@@ -7,7 +8,7 @@ namespace products.application.Services.Interface
         Task<IEnumerable<ProductViewModel>> GetAll();
         ProductViewModel GetById(string id);
         Task<ProductViewModel> Update(ProductViewModel vm);
-        ProductViewModel Add(AddProductViewModel vm);
+        ErrorOr<ProductViewModel> Add(AddProductViewModel vm);
         Task<bool> Remove(string id);
     }
 }
