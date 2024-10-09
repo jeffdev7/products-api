@@ -89,12 +89,13 @@ namespace products.test.Controller
             Assert.Equal(204, createdResult);
         }
 
-        [Fact]
-        public void UPDATE_WHENVALIDPRODUCT_SHOULDUPDATEPRODUCT()
+        [Theory]
+        [InlineData("3SC")]
+        public void UPDATE_WHENVALIDPRODUCT_SHOULDUPDATEPRODUCT(string productId)
         {
             //Arrage
             var product = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
-            var updatedProduct = new ProductViewModel("3SC", "ProductTest", 27.80m, 7);
+            var updatedProduct = new ProductViewModel(productId, "ProductTest", 27.80m, 7);
             var productsService = new Mock<IProductService>();
 
             productsService.Setup(_ => _.Update(It.IsAny<ProductViewModel>()))
@@ -103,7 +104,7 @@ namespace products.test.Controller
             var productController = new ProductsController(productsService.Object);
 
             //act
-            var result = productController.Put(updatedProduct);
+            var result = productController.Put(productId, updatedProduct);
 
             //assert
             Assert.NotNull(result);
@@ -181,8 +182,9 @@ namespace products.test.Controller
             Assert.Equal(validationErrors, badRequestResult?.Value);
         }
 
-        [Fact]
-        public void SHOULDNOTUPDATE_WHENPRODUCTFIELDSWEREINVALID_RETURSNBADREQUEST()
+        [Theory]
+        [InlineData("123")]
+        public void SHOULDNOTUPDATE_WHENPRODUCTIDDOESNOTMATCH_RETURSNBADREQUEST(string productId)
         {
             //Arrage
             var product = new ProductViewModel("", "", 10.87m, 10);
@@ -195,7 +197,30 @@ namespace products.test.Controller
             var productController = new ProductsController(productsService.Object);
 
             //act
-            var result = productController.Put(product);
+            var result = productController.Put(productId,product);
+
+            //assert
+            Assert.NotNull(result);
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+            var badRequestResult = result.Result as BadRequestObjectResult;
+        }
+
+        [Theory]
+        [InlineData("123")]
+        public void SHOULDNOTUPDATE_WHENPRODUCTFIELDSWEREINVALID_RETURSNBADREQUEST(string productId)
+        {
+            //Arrage
+            var product = new ProductViewModel(productId, "", 10.87m, 10);
+            var validationErrors = new List<Error> { Error.Validation("400") };
+            var productsService = new Mock<IProductService>();
+
+            productsService.Setup(_ => _.Update(It.IsAny<ProductViewModel>()))
+                .Returns(Task.FromResult(ErrorOr.ErrorOr<ProductViewModel>.From(validationErrors)));
+
+            var productController = new ProductsController(productsService.Object);
+
+            //act
+            var result = productController.Put(productId, product);
 
             //assert
             Assert.NotNull(result);

@@ -48,14 +48,15 @@ namespace products.api.Controllers
 
         [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [HttpPut]
-        public ActionResult<ProductViewModel> Put([FromBody] ProductViewModel product)
+        [HttpPut("{id}")]
+        public ActionResult<ProductViewModel> Put(string id, [FromBody] ProductViewModel product)
         {
+            if (product.Id != id)
+                return BadRequest("The product ID does not match.");
+
             var result = _productService.Update(product);
 
-            if (result.Result.IsError)
-                return BadRequest(result.Result.Errors);
-            return Ok();
+            return result.Result.IsError ? BadRequest(result.Result.Errors) : Ok();
         }
 
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status204NoContent)]
