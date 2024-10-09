@@ -10,7 +10,7 @@ namespace products.test.Controller
     public class ProductControllerTest
     {
         [Fact]
-        public async void SHOULD_GETALL_PRODUCTS()
+        public async void GETALL_SHOULDRETURNPRODUCTS()
         {
             //Arrage
             var listResult = new List<ProductViewModel>()
@@ -40,7 +40,7 @@ namespace products.test.Controller
 
         [Theory]
         [InlineData("3SC")]
-        public void SHOULD_GET_PRODUCTBYID(string productId)
+        public void GETBYPRODUCTID_SHOULDRETURNPRODUCT(string productId)
         {
             //Arrage
             var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
@@ -68,7 +68,7 @@ namespace products.test.Controller
 
         [Theory]
         [InlineData("3SC")]
-        public void SHOULD_REMOVE_PRODUCTBYID(string productId)
+        public void REMOVE_WHENVALIDID_SHOULDREMOVEPRODUCT(string productId)
         {
             //Arrage
             var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
@@ -90,7 +90,7 @@ namespace products.test.Controller
         }
 
         [Fact]
-        public void SHOULD_UPDATE_PRODUCT()
+        public void UPDATE_WHENVALIDPRODUCT_SHOULDUPDATEPRODUCT()
         {
             //Arrage
             var product = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
@@ -111,7 +111,7 @@ namespace products.test.Controller
         }
 
         [Fact]
-        public void SHOULD_ADD_PRODUCT()
+        public void ADD_SHOULDRETURNCREATEDPRODUCT()
         {
             //Arrage
             var product = new AddProductViewModel("ProductTest", 10.87m, 10);
@@ -128,12 +128,17 @@ namespace products.test.Controller
 
             //assert
             Assert.NotNull(result);
-            Assert.IsType<CreatedResult>(result.Result);
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            var returnedProduct = Assert.IsType<ProductViewModel>(createdResult.Value);
+            Assert.Equal(newProduct.Id, returnedProduct.Id);
+            Assert.Equal(newProduct.Name, returnedProduct.Name);
+            Assert.Equal(newProduct.Price, returnedProduct.Price);
+            Assert.Equal(newProduct.Stock, returnedProduct.Stock);
         }
 
         [Theory]
         [InlineData("123")]
-        public void SHOULD_NOT_GET_PRODUCTBYID(string productId)
+        public void SHOULDNOTGETPRODUCTBYID_WHENINVALIDID_RETURNSNOTFOUND(string productId)
         {
             //Arrage
             var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
@@ -154,7 +159,7 @@ namespace products.test.Controller
         }
 
         [Fact]
-        public void SHOULD_NOT_ADD_PRODUCT()
+        public void SHOULDNOTADD_WHENPRODUCTFIELDSWEREINVALID_RETURNSBADREQUEST()
         {
             //Arrage
             var product = new AddProductViewModel("", 10.87m, 10);
@@ -177,7 +182,7 @@ namespace products.test.Controller
         }
 
         [Fact]
-        public void SHOULD_NOT_UPDATE_PRODUCT()
+        public void SHOULDNOTUPDATE_WHENPRODUCTFIELDSWEREINVALID_RETURSNBADREQUEST()
         {
             //Arrage
             var product = new ProductViewModel("", "", 10.87m, 10);

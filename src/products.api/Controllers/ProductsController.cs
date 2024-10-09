@@ -43,7 +43,7 @@ namespace products.api.Controllers
 
             if (result.IsError)
                 return BadRequest(result.Errors);
-            return Created();
+            return CreatedAtAction(nameof(GetProductById), new { id = result.Value.Id }, result.Value);
         }
 
         [ProducesResponseType(typeof(ProductViewModel), StatusCodes.Status200OK)]
