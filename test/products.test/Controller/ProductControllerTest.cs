@@ -128,7 +128,12 @@ namespace products.test.Controller
 
             //assert
             Assert.NotNull(result);
-            Assert.IsType<CreatedResult>(result.Result);
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            var returnedProduct = Assert.IsType<ProductViewModel>(createdResult.Value);
+            Assert.Equal(newProduct.Id, returnedProduct.Id);
+            Assert.Equal(newProduct.Name, returnedProduct.Name);
+            Assert.Equal(newProduct.Price, returnedProduct.Price);
+            Assert.Equal(newProduct.Stock, returnedProduct.Stock);
         }
 
         [Theory]
