@@ -7,7 +7,8 @@
 #### GET - 200![get-products](https://github.com/user-attachments/assets/bc401515-e3ec-47b2-9042-54e825761826)
 
 
-#### POST - 201
+#### POST - 201![add-product-201](https://github.com/user-attachments/assets/5ae24541-f3b2-462c-a42a-6aad3bfa6162)
+
 
 #### POST - 400![error-add-product](https://github.com/user-attachments/assets/c38e1458-05cd-4eb8-9291-34d52ae62ba0)
 
