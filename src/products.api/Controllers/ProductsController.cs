@@ -59,7 +59,7 @@ namespace products.api.Controllers
         }
 
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status412PreconditionFailed)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public ActionResult<ProductViewModel> Delete(string id)
         {
