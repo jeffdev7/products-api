@@ -21,10 +21,10 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore products-api/src
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build products-api/src --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test --configuration Release --no-build
+        run: dotnet test products-api/src --configuration Release --no-build
