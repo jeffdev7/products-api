@@ -145,10 +145,10 @@ namespace products.test.Controller
             var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
 
             var productsService = new Mock<IProductService>();
-
+#nullable disable
             productsService.Setup(_ => _.GetById(It.IsAny<string>()))
                 .Returns((ProductViewModel)null);
-
+#nullable restore
             var productController = new ProductsController(productsService.Object);
 
             //act
