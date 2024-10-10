@@ -147,7 +147,7 @@ namespace products.test.Controller
             var productsService = new Mock<IProductService>();
 #nullable disable
             productsService.Setup(_ => _.GetById(It.IsAny<string>()))
-                .Returns((ProductViewModel)expectedResult);
+                .Returns((ProductViewModel)null);
 #nullable restore
             var productController = new ProductsController(productsService.Object);
 
