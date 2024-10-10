@@ -102,3 +102,48 @@
 <strong>Example:</strong>
 ##### No Content
 ![delete-product](https://github.com/user-attachments/assets/cdaa0ebe-d6fe-4b9d-bc7e-1e3e84754ec7)
+
+<h1>CI/CD Pipeline Documentation</h1>
+
+<h2>Purpose</h2>
+<p>This pipeline is designed for practicing CI/CD by automatically building and testing the project using xUnit. It triggers on pushes to the <code>main</code> branch and runs a series of steps to ensure the code is successfully built and passes all unit tests.</p>
+
+<h2>Trigger</h2>
+<ul>
+    <li><strong>Push</strong>: The pipeline runs whenever there is a push to the <code>main</code> branch.</li>
+</ul>
+
+<h2>Environment Variables</h2>
+<ul>
+    <li><strong>DOTNET_VERSION</strong>: Set to <code>8.0.x</code>, specifying the .NET version used in the pipeline.</li>
+</ul>
+
+<h2>Pipeline Stages</h2>
+<ol>
+    <li><strong>Checkout Code</strong>
+        <ul>
+            <li><strong>Action</strong>: Uses <code>actions/checkout@v4</code> to pull the latest code from the <code>main</code> branch.</li>
+        </ul>
+    </li>
+    <li><strong>Setup .NET</strong>
+        <ul>
+            <li><strong>Action</strong>: Uses <code>actions/setup-dotnet@v4</code> to install .NET SDK version specified by <code>DOTNET_VERSION</code>.</li>
+        </ul>
+    </li>
+    <li><strong>Install Dependencies</strong>
+        <ul>
+            <li><strong>Command</strong>: <code>dotnet restore</code> installs all project dependencies.</li>
+        </ul>
+    </li>
+    <li><strong>Build Project</strong>
+        <ul>
+            <li><strong>Command</strong>: <code>dotnet build --configuration Release --no-restore</code> builds the code in Release mode. The <code>--no-restore</code> flag skips the dependency restore step, as it has already been completed.</li>
+        </ul>
+    </li>
+    <li><strong>Run Unit Tests</strong>
+        <ul>
+            <li><strong>Command</strong>: <code>dotnet test --configuration Release --no-build</code> runs the tests in Release mode, using xUnit as the test framework. The <code>--no-build</code> flag skips the build step, as it has already been completed.</li>
+        </ul>
+    </li>
+</ol>
+
