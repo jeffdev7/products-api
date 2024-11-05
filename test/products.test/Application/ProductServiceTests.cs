@@ -145,5 +145,72 @@ namespace products.test.Application
             Assert.IsType<ProductViewModel>(result.Value);
         }
 
+
+        [Theory]
+        [InlineData("123")]
+        public void SHOULDNOTGETPRODUCT_WHENIDDOESNOTEXIST_RETURNSNOTFOUND(string productId)
+        {
+            //arrange
+            var expectedProduct = new ProductViewModel("0976", "ProductTest2", 11.0m, 7);
+
+            var productService = new Mock<IProductService>();
+
+            productService.Setup(_ => _.GetById(It.IsAny<string>()))
+                .Returns(expectedProduct);
+#nullable disable
+            _mapper.Setup(map => map.Map<ProductViewModel>(It.IsAny<Product>())).Returns((ProductViewModel)null);
+#nullable restore
+
+            var projectServiceMock = new ProductService(_productRepository.Object, _mapper.Object);
+
+            //act
+            var result = projectServiceMock.GetById(productId);
+
+            //assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void SHOULDNOTADDPRODUCT_WHENPRODUCTSFIELDSWEREINVALID_RETURNSERROR()
+        {
+            //arrange
+            var product = new AddProductViewModel("", 10.87m, 10);
+            var validationErrors = new List<ErrorOr.Error> { ErrorOr.Error.Validation("400") };
+            var productService = new Mock<IProductService>();
+
+            productService.Setup(_ => _.Add(It.IsAny<AddProductViewModel>()))
+                .Returns(ErrorOr.ErrorOr<ProductViewModel>.From(validationErrors));
+
+            var projectServiceMock = new ProductService(_productRepository.Object, _mapper.Object);
+
+            //act
+            var result = projectServiceMock.Add(product);
+
+            //assert
+            Assert.True(result.IsError);
+            result.Errors.Find(_ => _.Code == "Name");
+        }
+
+        [Fact]
+        public async Task SHOULDNOTUPDATE_WHENIDDOESNOTMATCH_RETURNSERROR()
+        {
+            //arrange
+            var expectedProduct = new ProductViewModel("", "ProductTest2", 11.0m, 7);
+            var productEntity = Product.Create("ProductTest2", 11.0m, 7);
+            var validationErrors = new List<ErrorOr.Error> { ErrorOr.Error.Validation("400") };
+            var productService = new Mock<IProductService>();
+
+            productService.Setup(_ => _.Update(It.IsAny<ProductViewModel>()))
+                .Returns(Task.FromResult(ErrorOr.ErrorOr<ProductViewModel>.From(validationErrors)));
+
+            var projectServiceMock = new ProductService(_productRepository.Object, _mapper.Object);
+
+            //act
+            var result = await projectServiceMock.Update(expectedProduct);
+
+            //assert
+            Assert.True(result.IsError);
+            result.Errors.Find(_ => _.Code == "Id");
+        }
     }
 }
