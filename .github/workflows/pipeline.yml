@@ -38,11 +38,13 @@ jobs:
           distribution: 'zulu'
           
       - name: Create sonar/scanner directories
+        working-directory: ./src
         run: |
           mkdir -p ./sonar/scanner
           echo "Directory structure created: $(ls -la ./sonar)"
           
       - name: Install SonarCloud scanner
+        working-directory: ./src
         run: |
           dotnet tool install dotnet-sonarscanner --tool-path ./.sonar/scanner
 
