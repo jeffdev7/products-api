@@ -40,7 +40,7 @@ jobs:
       - name: Create sonar/scanner directories
         working-directory: ./src
         run: |
-          mkdir -p ./sonar/scanner
+          mkdir -p ./sonar/scanner/dotnet-sonarscanner
           echo "Directory structure created: $(ls -la ./sonar)"
 
       - name: Build and analyze with SonarCloud
