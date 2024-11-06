@@ -1,0 +1,10 @@
+services:
+  products.api:
+    image: ${DOCKER_REGISTRY-}productsapi
+    container_name: products.api
+    build:
+      context: .
+      dockerfile: products.api/Dockerfile
+    ports:
+        - "5000:5000"
+        - "5001:5001"

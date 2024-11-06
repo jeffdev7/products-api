@@ -10,7 +10,7 @@ namespace products.test.Controller
     public class ProductControllerTest
     {
         [Fact]
-        public async void GETALL_SHOULDRETURNPRODUCTS()
+        public async Task GETALL_SHOULDRETURNPRODUCTS()
         {
             //Arrage
             var listResult = new List<ProductViewModel>()
@@ -139,7 +139,7 @@ namespace products.test.Controller
 
         [Theory]
         [InlineData("123")]
-        public void SHOULDNOTGETPRODUCTBYID_WHENINVALIDID_RETURNSNOTFOUND(string productId)
+        public void SHOULDNOT_GETPRODUCTBYID_WHENINVALIDID_RETURNSNOTFOUND(string productId)
         {
             //Arrage
             var expectedResult = new ProductViewModel("3SC", "ProductTest", 10.87m, 10);
@@ -160,7 +160,7 @@ namespace products.test.Controller
         }
 
         [Fact]
-        public void SHOULDNOTADD_WHENPRODUCTFIELDSWEREINVALID_RETURNSBADREQUEST()
+        public void SHOULDNOT_ADD_WHENPRODUCTFIELDSWEREINVALID_RETURNSBADREQUEST()
         {
             //Arrage
             var product = new AddProductViewModel("", 10.87m, 10);
@@ -184,7 +184,7 @@ namespace products.test.Controller
 
         [Theory]
         [InlineData("123")]
-        public void SHOULDNOTUPDATE_WHENPRODUCTIDDOESNOTMATCH_RETURSNBADREQUEST(string productId)
+        public void SHOULDNOT_UPDATE_WHENPRODUCTIDDOESNOTMATCH_RETURSNBADREQUEST(string productId)
         {
             //Arrage
             var product = new ProductViewModel("", "", 10.87m, 10);
@@ -207,7 +207,7 @@ namespace products.test.Controller
 
         [Theory]
         [InlineData("123")]
-        public void SHOULDNOTUPDATE_WHENPRODUCTFIELDSWEREINVALID_RETURSNBADREQUEST(string productId)
+        public void SHOULDNOT_UPDATE_WHENPRODUCTFIELDSWEREINVALID_RETURSNBADREQUEST(string productId)
         {
             //Arrage
             var product = new ProductViewModel(productId, "", 10.87m, 10);

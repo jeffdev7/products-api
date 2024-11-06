@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "products.crosscutting", "pr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-CrossCutting", "5-CrossCutting", "{A0D78E88-A662-4568-AE05-824BFA5288AB}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{0A864D70-2C96-4360-AD27-14D00282E2BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{686FBB60-DDE6-4362-A188-6C4F03B08418}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{686FBB60-DDE6-4362-A188-6C4F03B08418}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{686FBB60-DDE6-4362-A188-6C4F03B08418}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A864D70-2C96-4360-AD27-14D00282E2BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A864D70-2C96-4360-AD27-14D00282E2BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A864D70-2C96-4360-AD27-14D00282E2BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A864D70-2C96-4360-AD27-14D00282E2BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
