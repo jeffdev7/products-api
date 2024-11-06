@@ -63,4 +63,6 @@ jobs:
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"jeffdev7_products-api" /o:"jeffdev7" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build
           ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-      
+          env:
+          ACTIONS_STEP_DEBUG: true
+
