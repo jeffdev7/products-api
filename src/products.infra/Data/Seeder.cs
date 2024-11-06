@@ -3,7 +3,7 @@ using products.domain.Entities;
 
 namespace products.infra.Data
 {
-    public class Seeder
+    public static class Seeder
     {
         public static void RunSeeder(IServiceProvider serviceProvider)
         {

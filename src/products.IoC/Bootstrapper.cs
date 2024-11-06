@@ -6,7 +6,7 @@ using products.infra.Repositories;
 
 namespace products.IoC
 {
-    public class Bootstrapper
+    public static class Bootstrapper
     {
         public static void RegisterServices(IServiceCollection service)
         {

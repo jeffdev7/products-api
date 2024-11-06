@@ -12,6 +12,7 @@ namespace products.application.Services
     {
         private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
+        private bool _disposed;
 
         public ProductService(IProductRepository productRepository, IMapper mapper)
         {
@@ -69,7 +70,27 @@ namespace products.application.Services
         }
         public void Dispose()
         {
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    if (_productRepository is IDisposable disposableRepository)
+                    {
+                        disposableRepository.Dispose();
+                    }
+                    if (_mapper is IDisposable disposableMapper)
+                    {
+                        disposableMapper.Dispose();
+                    }
+                }
+                _disposed = true;
+            }
+        }
+
     }
 }
