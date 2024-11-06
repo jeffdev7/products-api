@@ -37,11 +37,14 @@ jobs:
           java-version: 17
           distribution: 'zulu'
           
+      - name: Create sonar/scanner directories
+        run: |
+          mkdir -p ./sonar/scanner
+          echo "Directory structure created: $(ls -la ./sonar)"
+          
       - name: Install SonarCloud scanner
         run: |
-          # Explicitly install the SonarScanner tool and check if it's installed correctly
           dotnet tool install dotnet-sonarscanner --tool-path ./.sonar/scanner
-          echo "SonarScanner location: $(ls -la ./.sonar/scanner)"
 
       - name: Build and analyze with SonarCloud
         working-directory: ./src
