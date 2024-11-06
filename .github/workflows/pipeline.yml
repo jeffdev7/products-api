@@ -30,26 +30,3 @@ jobs:
 
       - name: Test
         run: dotnet test src/products.sln --configuration Release --no-build
-        
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'zulu'
-          
-      - name: Create sonar/scanner directories
-        working-directory: ./src
-        run: |
-          mkdir -p ./sonar/scanner/dotnet-sonarscanner
-          echo "Directory structure created: $(ls -la ./sonar)"
-
-      - name: Build and analyze with SonarCloud
-        env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          ./sonar/scanner/dotnet-sonarscanner begin /k:"jeffdev7_products-api" /o:"jeffdev7" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml" /d:sonar.exclusions="**/Dockerfile,**/*.yml,**/excluded-folder/**"
-          dotnet build src/products.sln --configuration Release --no-restore
-          ./sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
-          
-     
