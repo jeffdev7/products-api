@@ -43,18 +43,4 @@ jobs:
           mkdir -p ./sonar/scanner
           echo "Directory structure created: $(ls -la ./sonar)"
           
-      - name: Install SonarCloud scanner
-        working-directory: ./src
-        run: |
-          dotnet tool install dotnet-sonarscanner --tool-path ./.sonar/scanner
-
-      - name: Build and analyze with SonarCloud
-        working-directory: ./src
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          echo "Checking if SonarScanner exists..."
-          ls -la ./.sonar/scanner # List contents to verify tool is installed
-          ./.sonar/scanner/dotnet-sonarscanner begin /k:"jeffdev7_products-api" /o:"jeffdev7" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build products.sln --configuration Release --no-restore
-          ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+     
