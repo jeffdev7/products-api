@@ -1,4 +1,6 @@
 # Products API
+<p>A simple API with all the CRUD operations with In-Memory database.</p>
+
 ## API Documentation  
 ### Endpoints
 ![api-endpoints](https://github.com/user-attachments/assets/6f0ea764-aa73-450a-ac0c-2b772764a54c)
@@ -103,7 +105,7 @@
 ##### No Content
 ![delete-product](https://github.com/user-attachments/assets/cdaa0ebe-d6fe-4b9d-bc7e-1e3e84754ec7)
 
-<h1>CI/CD Pipeline Documentation</h1>
+<h1>Continuous Integration Pipeline</h1>
 
 <h2>Purpose</h2>
 <p>This pipeline is designed for practicing CI/CD by automatically building and testing the project using xUnit. It triggers on pushes to the <code>main</code> branch and runs a series of steps to ensure the code is successfully built and passes all unit tests.</p>
@@ -146,4 +148,3 @@
         </ul>
     </li>
 </ol>
-
